@@ -17,7 +17,7 @@ main() {
     comment('Strings\narrays\nobjects'),
 
     // More assignments
-    reference('myObject').assign(map({
+    reference('myObject').assign(object({
       'a': literal(1),
       'b': literal(true),
       'c': literal(525),
@@ -52,7 +52,7 @@ main() {
     )),
 
     // Export definition
-    map({
+    object({
       'str': reference('myString'),
       'main': reference('main'),
     }),

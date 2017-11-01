@@ -117,13 +117,13 @@ class _Array extends Expression {
   }
 }
 
-Expression map(Map<String, Expression> map) => new _Map(map);
+Expression object(Map<String, Expression> values) => new _Object(values);
 
 Expression function(String name,
         {@required Iterable<String> params,
         @required int numLocals,
         @required Expression entry}) =>
-    map({
+    object({
       'name': literal(name),
       'params': array(params.map(literal)),
       'num_locals': literal(numLocals),
@@ -132,7 +132,7 @@ Expression function(String name,
 
 Expression entry(
         {@required String name, @required Iterable<Expression> instrs}) =>
-    map({
+    object({
       'name': literal(name),
       'instrs': array(instrs),
     });
@@ -151,20 +151,20 @@ Expression op(String name,
   if (numArgs != null) m['num_args'] = literal(numArgs);
   if (idx != null) m['idx'] = literal(idx);
 
-  return map(m);
+  return object(m);
 }
 
-class _Map extends Expression {
-  final Map<String, Expression> map;
+class _Object extends Expression {
+  final Map<String, Expression> values;
 
-  _Map(this.map);
+  _Object(this.values);
 
   @override
   String compileExpression(CodeBuffer buffer) {
     int i = 0;
-    return map.keys.fold<StringBuffer>(new StringBuffer('{ '), (b, key) {
+    return values.keys.fold<StringBuffer>(new StringBuffer('{ '), (b, key) {
           if (i++ > 0) b.write(', ');
-          return b..write('$key: ' + map[key].compileExpression(buffer));
+          return b..write('$key: ' + values[key].compileExpression(buffer));
         }).toString() +
         ' }';
   }
